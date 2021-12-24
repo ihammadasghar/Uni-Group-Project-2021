@@ -11,7 +11,7 @@ def save_game(filename):
         #  Save player records
         player_records = PR.all()
         for player in player_records:
-            file.write(f"{player['name']};{player['played']};{player['won']};{player['drawn']};{player['lost']}\n")
+            file.write(f"{player['name']};{player['played']};{player['won']};{player['drawn']};{player['lost']};\n")
 
         file.write("\n")
 
@@ -25,6 +25,6 @@ def save_game(filename):
                 if i != len(pockets)-1:  #  We dont want to include comma after the last element
                     line += str(pockets[i]) + ","
                 else:
-                    line += str(pockets[i]) + "\n"
+                    line += str(pockets[i]) + ";\n"
             
             file.write(line)
