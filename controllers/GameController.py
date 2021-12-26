@@ -24,3 +24,14 @@ def register_player(player_name):
 
 	PlayerRecord.create(new_player_record)
 	return True
+
+
+def create_player_instance(player_name, played=0, won=0, drawn=0, lost=0):
+	new_player_record = {
+		'name': player_name,
+		'played': int(played),
+		'won': int(won),
+		'drawn': int(drawn),
+		'lost': int(lost)
+	}
+	return new_player_record
