@@ -11,7 +11,8 @@ def save_game(filename):
         #  Save player records
         player_records = PR.all()
         for player in player_records:
-            file.write(f"{player['name']};{player['played']};{player['won']};{player['drawn']};{player['lost']};\n")
+            file.write(";".join([str(val) for val in player.values()]))
+            file.write(";\n")
 
         file.write("\n")
 
