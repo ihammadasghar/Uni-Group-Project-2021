@@ -35,8 +35,6 @@ def load_game(filename):
 
             Board.set(loaded_board)
             PR.set(loaded_player_records)
-            print(Board.get())
-            print(PR.all())
             return True
     else:
         return False
