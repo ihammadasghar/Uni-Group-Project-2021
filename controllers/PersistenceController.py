@@ -10,7 +10,7 @@ def load_game(filename):
         with open(filename, "r", encoding="utf-8") as file:
             lines = file.readlines()
             new_records = []
-            new_board = {}
+            loaded_board = {}
             checking = "records"
             for line in lines:
                 if line != "\n":
