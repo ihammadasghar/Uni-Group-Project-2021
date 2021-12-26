@@ -28,6 +28,7 @@ def main():
 				continue
 			filename = commands[1]
 			save_game(filename)
+
 		# quando for introduzida uma linha em branco, o programa termina
 		elif command == '':
 			break
