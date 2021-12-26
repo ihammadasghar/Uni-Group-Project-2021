@@ -22,6 +22,13 @@ def main():
 			player_name = commands[1]
 			register_player(player_name)
 
+		elif command == 'G':
+			if len(commands) - 1 != 1:  
+				print('Instrução inválida.')
+				continue
+			filename = commands[1]
+			save_game(filename)
+
 		# quando for introduzida uma linha em branco, o programa termina
 		elif command == '':
 			break
@@ -37,3 +44,8 @@ def register_player(player_name):
 		print("Jogador registado com sucesso.")
 	else:
 		print("Jogador existente.")
+
+
+def save_game(filename):
+	pclr.save_game(filename)
+	print("Jogo gravado com sucesso.")
