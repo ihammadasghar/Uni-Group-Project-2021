@@ -23,7 +23,7 @@ def main():
 			register_player(player_name)
 
 		elif command == 'L':
-      if len(commands) - 1 != 1:  
+			if len(commands) - 1 != 1:  
 				print('Instrução inválida.')
 				continue
 			filename = commands[1]
