@@ -18,7 +18,7 @@ def save_game(filename):
 
         #  Save board state
         board = Board.board
-        for player in board.items():
+        for name, pockets in board.items():
             name = player[0]
             pockets = player[1]
             line = name + ";" 
