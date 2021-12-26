@@ -19,7 +19,6 @@ def save_game(filename):
         #  Save board state
         board = Board.board
         for name, pockets in board.items():
-            pockets = player[1]
             line = name + ";" 
             for i in range(len(pockets)): 
                 if i != len(pockets)-1:  #  We dont want to include comma after the last element
