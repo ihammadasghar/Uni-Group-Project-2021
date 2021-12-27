@@ -13,8 +13,6 @@ def main():
 		command = commands[0].upper()
 
 		if command == 'RJ':
-			# para comando 'RJ' o utilizador deve só entrar 1 argumento, 
-			# que é o nome do jogador
 			if len(commands) - 1 != 1:  
 				print('Instrução inválida.')
 				continue
@@ -36,7 +34,7 @@ def main():
 			filename = commands[1]
 			save_game(filename)
 
-		# quando for introduzida uma linha em branco, o programa termina
+		# close the program, if a blank line is entered
 		elif command == '':
 			break
 
@@ -55,6 +53,7 @@ def register_player(player_name):
 
 def load_game(filename):
 	loaded = pclr.load_game(filename)
+
 	if loaded:
 		print("Jogo lido com sucesso.")
 	else:
