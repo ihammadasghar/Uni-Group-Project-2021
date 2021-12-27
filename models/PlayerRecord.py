@@ -4,7 +4,7 @@
 
 # Ex. player_records =  [{'name': 'Anees', 'played': 4, 'won': 2, 'drawn': 1, 'lost': 1}]
 
-player_records = [{'name': 'Anees', 'played': 4, 'won': 2, 'drawn': 1, 'lost': 1}]
+player_records = []
 
 
 def all():
@@ -13,7 +13,6 @@ def all():
 
 def create(new_player_record):
 	player_records.append(new_player_record)
-	return
 
 
 def set(new_player_records):
