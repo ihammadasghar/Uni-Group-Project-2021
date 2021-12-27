@@ -8,20 +8,13 @@ from models import PlayerRecord
 
 def register_player(player_name):
 	players = PlayerRecord.all()
-
 	for p in players:
+		# return false if player with this name already exists
 		if p['name'] == player_name:
-			# já existe um jogador com este nome
 			return False
 
-	new_player_record = {
-		'name': player_name,
-		'played': 0,
-		'won': 0,
-		'drawn': 0,
-		'lost': 0
-	}
-
+	# create and add player to player_records
+	new_player_record = create_player_instance(player_name)
 	PlayerRecord.create(new_player_record)
 	return True
 

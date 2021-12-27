@@ -13,7 +13,8 @@ def main():
 		command = commands[0].upper()
 
 		if command == 'RJ':
-			if len(commands) - 1 != 1:  
+			# check if number of args are correct for this command
+			if len(commands)-1 != 1:  
 				print('Instrução inválida.')
 				continue
 
@@ -21,16 +22,20 @@ def main():
 			register_player(player_name)
 
 		elif command == 'L':
-			if len(commands) - 1 != 1:  
+			# check if number of args are correct for this command
+			if len(commands)-1 != 1:  
 				print('Instrução inválida.')
 				continue
+
 			filename = commands[1]
 			load_game(filename)
       
 		elif command == 'G':
-			if len(commands) - 1 != 1:  
+			# check if number of args are correct for this command
+			if len(commands)-1 != 1:  
 				print('Instrução inválida.')
 				continue
+				
 			filename = commands[1]
 			save_game(filename)
 
