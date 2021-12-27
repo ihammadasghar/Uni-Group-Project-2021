@@ -1,4 +1,6 @@
 .vscode
 *.py[cod]
 .venv
+
 **/__pycache__/
+saved/*
