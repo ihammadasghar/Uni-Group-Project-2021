@@ -48,6 +48,10 @@ def load_game(filename):
 
     
 def save_game(filename):
+    # create "saved" directory if it doesn't exist already
+    if not os.path.isdir('./saved'):
+        os.mkdir('./saved')
+
     filepath = f"./saved/{filename}"
 
     with open(filepath, mode="w") as file:
