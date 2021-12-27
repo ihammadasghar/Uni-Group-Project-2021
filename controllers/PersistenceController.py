@@ -26,7 +26,7 @@ def load_game(filename):
                     else:
                         item = line.split(";")
                         name = item[0]
-                        pockets = item[1][:-2].split(",")
+                        pockets = item[1][:-1].split(",")
                         pockets = [int(p) for p in pockets]
                         loaded_board[name] = pockets
 
@@ -35,6 +35,8 @@ def load_game(filename):
 
             Board.set(loaded_board)
             PR.set(loaded_player_records)
+            print('loaded board', loaded_board)
+            print('loader_player_records', loaded_player_records)
             return True
     else:
         return False
