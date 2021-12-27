@@ -12,7 +12,7 @@ def load_game(filename):
     filepath = f"./saved/{filename}"
 
     # return false if file doesn't exist
-    if not os.path.exists(filepath):
+    if not os.path.isfile(filepath):
         return False
 
     with open(filepath, "r", encoding="utf-8") as file:
