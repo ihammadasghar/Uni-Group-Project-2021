@@ -73,7 +73,7 @@ No nível **Normal**, o jogador automático opta pela seguinte estratégia:
 
 No nível **Avançado**, o  jogador automático opta pelos seguintes passos, por ordem:
 
-1. Se possível, seleciona uma casa que permita capturar as peças de uma das casas do oponente (ver Regra B).
+1. Se possível, seleciona uma casa que permita capturar as peças de uma das casas do oponente. Se existirem várias na mesma situação, opta pela mais à esquerda possível (ver Regra B).
 2. Se possível, seleciona uma casa que permita terminar no poço, de forma a jogar novamente. Se existirem várias na mesma situação, opta pela mais à esquerda possível (ver Regra A).
 3. Seleciona a casa mais à direita possível para espalhar sementes.
 
@@ -208,7 +208,7 @@ Saída com insucesso:
 
 - Quando não existe um jogo em curso:
 
-      Não existem jogo em curso.
+      Não existe jogo em curso.
 
 ### Efetuar jogada (J)
 
@@ -226,15 +226,15 @@ Saída com sucesso:
 
 Nota: Deve surgir apenas uma saída com sucesso, com prioridade indicada pela seguinte ordem de saídas.
 
-- Quando o jogador tem direito a uma nova jogada:
-
-      O jogador NomeJogador tem direito a outra jogada.
-
 - Quando o jogo termina:
 
       Jogo terminado.
       NomeJogadorA NumSementes
       NomeJogadorB NumSementes
+
+- Quando o jogador tem direito a uma nova jogada:
+
+      O jogador NomeJogador tem direito a outra jogada.
 
 - Quando a jogada termina:
 
@@ -244,7 +244,7 @@ Saída com insucesso:
 
 - Quando não existe um jogo em curso:
 
-      Não existem jogo em curso.
+      Não existe jogo em curso.
 
 - Quando o jogador indicado não existe:
 

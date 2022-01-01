@@ -2,9 +2,17 @@
 # para aceder, alterar este tabuleiro (esta mensagem vai ser removida 
 # antes de submeter o projeto)
 
-# Ex. board = {'Andre': [1, 2, 3, 4, 5, 6, 10], 'Walgidio': [3, 4, 5, 6, 7, 8, 12]}
-
-board = {}
+board = {
+    'player_1': {
+        'name': None,
+        'pockets': [0, 0, 0, 0, 0, 0, 0]
+    },
+    'player_2': {
+        'name': None,
+        'pockets': [0, 0, 0, 0, 0, 0, 0]
+    },
+    'level': None
+}
 
 
 def get():
