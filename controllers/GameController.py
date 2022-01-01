@@ -37,3 +37,40 @@ def game_in_progress():
 		return True
 	else:
 		return False
+
+def start_automatic_game(player_name, level):
+	result = {'game_in_progress': False, 'player_not_found': False}
+	
+	if game_in_progress():
+		result['game_in_progress'] = True 
+		return result
+
+	player = PlayerRecord.get_player(player_name)
+	if player is None:
+		result['player_not_found'] = True
+		return result 
+
+	auto_player = PlayerRecord.get_player('CPU')
+	if auto_player is None:
+		auto_player = create_player_instance('CPU') 
+		PlayerRecord.create(auto_player) 
+
+	board = {
+    	'player_1': {
+        	'name': player_name,
+        	'pockets': [4, 4, 4, 4, 4, 4, 0]
+ 		},
+    	'player_2': {
+        	'name': 'CPU',
+        	'pockets': [4, 4, 4, 4, 4, 4, 0]
+    	},
+    	'level': level 
+	} 
+	Board.set(board) 
+
+	player['played'] += 1
+	auto_player['played'] += 1
+
+	return result 
+
+
