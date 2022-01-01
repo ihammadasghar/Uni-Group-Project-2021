@@ -28,3 +28,12 @@ def create_player_instance(player_name, played=0, won=0, drawn=0, lost=0):
 		'lost': int(lost)
 	}
 	return new_player_record
+
+
+def game_in_progress():
+	board = Board.get()
+
+	if board['player_1']['name']:
+		return True
+	else:
+		return False
