@@ -65,7 +65,10 @@ def save_game(filename):
 
         #  save board state
         board = Board.get()
-        for name, pockets in board.items():
-            line = name + ";" 
-            line += ",".join([str(p) for p in pockets]) + "\n"
+        players = [board['player_1'], board['player_2']]
+        for player in players:
+            line = player['name'] + ";" 
+            line += ",".join([str(p) for p in player['pockets']]) + "\n"
             file.write(line)
+        file.write(board['level'])
+            
