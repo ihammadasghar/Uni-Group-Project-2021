@@ -30,6 +30,25 @@ def create_player_instance(player_name, played=0, won=0, drawn=0, lost=0):
 	return new_player_record
 
 
+def create_board_instance(player1_name, 
+						  player2_name, 
+						  player1_pockets=[4, 4, 4, 4, 4, 4, 0], 
+						  player2_pockets=[4, 4, 4, 4, 4, 4, 0], 
+						  level=None):
+	board = {
+    	'player_1': {
+        	'name': player1_name,
+        	'pockets': list(map(int, player1_pockets))
+ 		},
+    	'player_2': {
+        	'name': player2_name,
+        	'pockets': list(map(int, player2_pockets))
+    	},
+    	'level': level 
+	} 
+	return board
+
+
 def game_in_progress():
 	board = Board.get()
 
@@ -37,6 +56,7 @@ def game_in_progress():
 		return True
 	else:
 		return False
+
 
 def start_automatic_game(player_name, level):
 	result = {'game_in_progress': False, 'player_not_found': False}
@@ -55,17 +75,7 @@ def start_automatic_game(player_name, level):
 		auto_player = create_player_instance('CPU') 
 		PlayerRecord.create(auto_player) 
 
-	board = {
-    	'player_1': {
-        	'name': player_name,
-        	'pockets': [4, 4, 4, 4, 4, 4, 0]
- 		},
-    	'player_2': {
-        	'name': 'CPU',
-        	'pockets': [4, 4, 4, 4, 4, 4, 0]
-    	},
-    	'level': level 
-	} 
+	board = create_board_instance(player1_name=player_name, player2_name='CPU', level=level)
 	Board.set(board) 
 
 	player['played'] += 1
