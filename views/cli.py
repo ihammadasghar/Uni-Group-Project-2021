@@ -21,6 +21,16 @@ def main():
 			player_name = commands[1]
 			register_player(player_name)
 
+		elif command == 'IJA':
+			# check if number of args are correct for this command
+			if len(commands) !=3:
+				print('Instrução inválida.')
+				continue
+
+			player_name = commands[1]
+			level = commands[2]
+			start_automatic_game(player_name, level)
+
 		elif command == 'L':
 			# check if number of args are correct for this command
 			if len(commands)-1 != 1:  
@@ -68,3 +78,14 @@ def load_game(filename):
 def save_game(filename):
 	pclr.save_game(filename)
 	print("Jogo gravado com sucesso.")
+
+
+
+def start_automatic_game(player_name, level):
+	result = gclr.start_automatic_game(player_name, level)
+	if result['game_in_progress']:
+		print('Existe um jogo em curso.')
+	elif result['player_not_found']:
+		print('Jogador inexistente.')
+	else:
+		print(f'Jogo automático de nivel {level} iniciado com sucesso.')
