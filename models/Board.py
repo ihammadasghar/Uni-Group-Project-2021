@@ -5,11 +5,11 @@
 board = {
     'player_1': {
         'name': None,
-        'pockets': [0, 0, 0, 0, 0, 0, 0]
+        'pockets': [4, 4, 4, 4, 4, 4, 0]
     },
     'player_2': {
         'name': None,
-        'pockets': [0, 0, 0, 0, 0, 0, 0]
+        'pockets': [4, 4, 4, 4, 4, 4, 0]
     },
     'level': None
 }
