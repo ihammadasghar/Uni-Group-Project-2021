@@ -38,11 +38,11 @@ def create_board_instance(player1_name,
 	board = {
     	'player_1': {
         	'name': player1_name,
-        	'pockets': list(map(int, player1_pockets))
+        	'pockets': player1_pockets
  		},
     	'player_2': {
         	'name': player2_name,
-        	'pockets': list(map(int, player2_pockets))
+        	'pockets': player2_pockets
     	},
     	'level': level 
 	} 
