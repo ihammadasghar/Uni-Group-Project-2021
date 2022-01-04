@@ -14,35 +14,27 @@ def register_player(player_name):
 			return False
 
 	# create and add player to player_records
-	new_player_record = create_player_instance(player_name)
+	new_player_record = new_player_instance(player_name)
 	PlayerRecord.create(new_player_record)
 	return True
 
 
-def create_player_instance(player_name, played=0, won=0, drawn=0, lost=0):
-	new_player_record = {
-		'name': player_name,
-		'played': int(played),
-		'won': int(won),
-		'drawn': int(drawn),
-		'lost': int(lost)
+def new_player_instance(player_name):
+	player = {
+		'name': player_name, 'played': 0, 'won': 0, 'drawn': 0, 'lost': 0
 	}
-	return new_player_record
+	return player
 
 
-def create_board_instance(player1_name, 
-						  player2_name, 
-						  player1_pockets=[4, 4, 4, 4, 4, 4, 0], 
-						  player2_pockets=[4, 4, 4, 4, 4, 4, 0], 
-						  level=None):
+def new_board_instance(player_1_name=None, player_2_name=None, level=None):
 	board = {
     	'player_1': {
-        	'name': player1_name,
-        	'pockets': player1_pockets
+        	'name': player_1_name,
+        	'pockets': [4, 4, 4, 4, 4, 4, 0]
  		},
     	'player_2': {
-        	'name': player2_name,
-        	'pockets': player2_pockets
+        	'name': player_2_name,
+        	'pockets': [4, 4, 4, 4, 4, 4, 0]
     	},
     	'level': level 
 	} 
@@ -52,6 +44,8 @@ def create_board_instance(player1_name,
 def game_in_progress():
 	board = Board.get()
 
+	# if the player_1 name in the program's board is not None,
+	# a game is in progress
 	if board['player_1']['name']:
 		return True
 	else:
@@ -75,12 +69,10 @@ def start_automatic_game(player_name, level):
 		auto_player = create_player_instance('CPU') 
 		PlayerRecord.create(auto_player) 
 
-	board = create_board_instance(player1_name=player_name, player2_name='CPU', level=level)
+	board = new_board_instance(player_1_name=player_name, player_2_name='CPU', level=level)
 	Board.set(board) 
 
 	player['played'] += 1
 	auto_player['played'] += 1
 
 	return result 
-
-
