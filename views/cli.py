@@ -17,37 +17,35 @@ def main():
 			if len(commands)-1 != 1:  
 				print('Instrução inválida.')
 				continue
+			register_player(player_name=commands[1])
 
-			player_name = commands[1]
-			register_player(player_name)
+		elif command == 'IJ':
+			# check if number of args are correct for this command
+			if len(commands)-1 != 2:
+				print('Instrução inválida.')
+				continue
+			start_game(player_1_name=commands[1], player_2_name=commands[2])
 
 		elif command == 'IJA':
 			# check if number of args are correct for this command
-			if len(commands) !=3:
+			if len(commands)-1 != 2:
 				print('Instrução inválida.')
 				continue
-
-			player_name = commands[1]
-			level = commands[2]
-			start_automatic_game(player_name, level)
+			start_auto_game(player_name=commands[1], level=commands[2])
 
 		elif command == 'L':
 			# check if number of args are correct for this command
 			if len(commands)-1 != 1:  
 				print('Instrução inválida.')
 				continue
-
-			filename = commands[1]
-			load_game(filename)
+			load_game(filename=commands[1])
       
 		elif command == 'G':
 			# check if number of args are correct for this command
 			if len(commands)-1 != 1:  
 				print('Instrução inválida.')
 				continue
-				
-			filename = commands[1]
-			save_game(filename)
+			save_game(filename=commands[1])
 
 		# close the program, if a blank line is entered
 		elif command == '':
@@ -73,16 +71,27 @@ def load_game(filename):
 		print("Jogo lido com sucesso.")
 	else:
 		print("Ficheiro inexistente.")
-    
+
 
 def save_game(filename):
 	pclr.save_game(filename)
 	print("Jogo gravado com sucesso.")
 
 
+def start_game(player_1_name, player_2_name):
+	result = gclr.start_game(player_1_name, player_2_name)
 
-def start_automatic_game(player_name, level):
-	result = gclr.start_automatic_game(player_name, level)
+	if result['game_in_progress']:
+		print('Existe um jogo em curso.')
+	elif result['player_not_found']:
+		print('Jogador inexistente.')
+	else:
+		print(f'Jogo iniciado com sucesso.')
+
+
+def start_auto_game(player_name, level):
+	result = gclr.start_game(player_name, 'CPU', level)
+
 	if result['game_in_progress']:
 		print('Existe um jogo em curso.')
 	elif result['player_not_found']:
