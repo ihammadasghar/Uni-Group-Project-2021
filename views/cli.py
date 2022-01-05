@@ -47,6 +47,13 @@ def main():
 				continue
 			save_game(filename=commands[1])
 
+		elif command == 'DJ':
+			# check if number of args are correct for this command
+			if len(commands)-1 != 0:  
+				print('Instrução inválida.')
+				continue
+			display_game_detail()
+
 		# close the program, if a blank line is entered
 		elif command == '':
 			break
@@ -98,3 +105,10 @@ def start_auto_game(player_name, level):
 		print('Jogador inexistente.')
 	else:
 		print(f'Jogo automático de nivel {level} iniciado com sucesso.')
+
+
+def display_game_detail():
+	board = gclr.get_game_detail()
+	players = [board['player_1'], board['player_2']]
+	for player in players:
+		print("{} ({}) ({}) ({}) ({}) ({}) ({}) [{}]".format(player['name'], *player['pockets']))
