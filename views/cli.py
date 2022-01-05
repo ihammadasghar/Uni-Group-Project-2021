@@ -16,7 +16,7 @@ def main():
 			if is_arguments_length(commands, 1):
 				register_player(player_name=commands[1])
 
-		elif commands == 'LJ':
+		elif command == 'LJ':
 			if is_arguments_length(commands, 0):
 				list_players()
 
@@ -52,6 +52,13 @@ def main():
 			print('Instrução inválida.')
 
 
+def is_arguments_length(commands, length):
+	if len(commands)-1 != length:  
+		print('Instrução inválida.')
+		return False
+	return True
+
+
 def register_player(player_name):
 	registered = gclr.register_player(player_name)
 
@@ -60,11 +67,13 @@ def register_player(player_name):
 	else:
 		print("Jogador existente.")
 
+
 def list_players():
 	players = gclr.get_players()
 
 	for player in players:
 		print("{} {} {} {} {}".format(*player.values()))
+
 
 def load_game(filename):
 	loaded = pclr.load_game(filename)
@@ -104,6 +113,11 @@ def start_auto_game(player_name, level):
 
 def display_game_detail():
 	board = gclr.get_game_detail()
+
+	if not board:
+		print("Não existe jogo em curso.")
+		return
+
 	players = [board['player_1'], board['player_2']]
 	for player in players:
 		print("{} ({}) ({}) ({}) ({}) ({}) ({}) [{}]".format(player['name'], *player['pockets']))
@@ -120,10 +134,3 @@ def give_up_game(player_names):
 		print('Jogador não participa no jogo em curso.')
 	else:
 		print('Jogo terminado com sucesso.')
-		
-    
-def is_arguments_length(commands, length):
-	if len(commands)-1 != length:  
-		print('Instrução inválida.')
-		return False
-	return True
