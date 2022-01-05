@@ -13,51 +13,33 @@ def main():
 		command = commands[0].upper()
 
 		if command == 'RJ':
-			# check if number of args are correct for this command
-			if len(commands)-1 != 1:  
-				print('Instrução inválida.')
-				continue
-			register_player(player_name=commands[1])
+			if is_arguments_length(commands, 1):
+				register_player(player_name=commands[1])
 
 		elif command == 'IJ':
-			# check if number of args are correct for this command
-			if len(commands)-1 != 2:
-				print('Instrução inválida.')
-				continue
-			start_game(player_1_name=commands[1], player_2_name=commands[2])
+			if is_arguments_length(commands, 2):
+				start_game(player_1_name=commands[1], player_2_name=commands[2])
 
 		elif command == 'IJA':
-			# check if number of args are correct for this command
-			if len(commands)-1 != 2:
-				print('Instrução inválida.')
-				continue
-			start_auto_game(player_name=commands[1], level=commands[2])
+			if is_arguments_length(commands, 2):
+				start_auto_game(player_name=commands[1], level=commands[2])
 
 		elif command == 'L':
-			# check if number of args are correct for this command
-			if len(commands)-1 != 1:  
-				print('Instrução inválida.')
-				continue
-			load_game(filename=commands[1])
+			if is_arguments_length(commands, 1): 
+				load_game(filename=commands[1])
       
 		elif command == 'G':
-			# check if number of args are correct for this command
-			if len(commands)-1 != 1:  
-				print('Instrução inválida.')
-				continue
-			save_game(filename=commands[1])
+			if is_arguments_length(commands, 1):
+				save_game(filename=commands[1])
 
 		elif command == 'DJ':
-			# check if number of args are correct for this command
-			if len(commands)-1 != 0:  
-				print('Instrução inválida.')
-				continue
-			display_game_detail()
+			if is_arguments_length(commands, 0):
+				display_game_detail()
 		
 		elif command == 'D':
 			if is_arguments_length(commands, 1) or is_arguments_length(commands, 2):
 				give_up_game(commands[1:])
-		
+        
 		# close the program, if a blank line is entered
 		elif command == '':
 			break
@@ -130,3 +112,9 @@ def give_up_game(player_names):
 	else:
 		print('Jogo terminado com sucesso.')
 		
+    
+def is_arguments_length(commands, length):
+	if len(commands)-1 != length:  
+		print('Instrução inválida.')
+		return False
+	return True
