@@ -26,8 +26,26 @@ def new_player_instance(player_name):
 	return player
 
 
-def sort_players(players):
-	return players
+def sort_players(players): # bubble sort algorithm
+	n_players = len(players)
+	sorted_players = players.copy()
+
+	for i in range(n_players):
+		for j in range(n_players-i-1):
+			# case 1 - the player j has won less games than player j+1
+			case_1 = sorted_players[j]['won'] < sorted_players[j+1]['won']
+
+			# case 2 - player j and j+1 have equal number of wins but player j's
+			# name is lower alphabetically than player j+1
+			case_2 = (sorted_players[j]['won'] == sorted_players[j+1]['won']) \
+					and (sorted_players[j]['name'] > sorted_players[j+1]['name'])
+
+			if case_1 or case_2:
+				tmp = sorted_players[j]
+				sorted_players[j] = sorted_players[j+1]
+				sorted_players[j+1] = tmp
+
+	return sorted_players
 
 
 def get_players():
