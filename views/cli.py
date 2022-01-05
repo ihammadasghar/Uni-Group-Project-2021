@@ -16,6 +16,12 @@ def main():
 			if is_arguments_length(commands, 1):
 				register_player(player_name=commands[1])
 
+		elif commands == 'LJ':
+			if len(commands)-1 != 0:
+				print('Instrução inválida.')
+				continue
+			list_players()
+
 		elif command == 'IJ':
 			if is_arguments_length(commands, 2):
 				start_game(player_1_name=commands[1], player_2_name=commands[2])
@@ -56,6 +62,11 @@ def register_player(player_name):
 	else:
 		print("Jogador existente.")
 
+def list_players():
+	players = gclr.get_players()
+
+	for player in players:
+		print("{} {} {} {} {}".format(*player.values()))
 
 def load_game(filename):
 	loaded = pclr.load_game(filename)

@@ -26,6 +26,17 @@ def new_player_instance(player_name):
 	return player
 
 
+def bubble_sort(itens):
+	pass
+
+
+def get_players():
+	players = PlayerRecord.all()
+	bubble_sort(players)
+	return players
+
+
+
 def new_board_instance(player_1_name=None, player_2_name=None, level=None):
 	board = {
     	'player_1': {
