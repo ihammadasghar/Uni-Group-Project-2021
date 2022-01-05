@@ -77,3 +77,8 @@ def start_game(player_1_name, player_2_name, level=None):
 	player_2['played'] += 1
 
 	return result 
+
+
+def get_game_detail():
+	board = Board.get()
+	return board
