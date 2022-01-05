@@ -55,10 +55,8 @@ def main():
 			display_game_detail()
 		
 		elif command == 'D':
-			if len(commands)-1 not in [1, 2]:
-				print('Instrução inválida.')
-				continue
-			give_up_game(commands[1:])
+			if is_arguments_length(commands, 1) or is_arguments_length(commands, 2):
+				give_up_game(commands[1:])
 		
 		# close the program, if a blank line is entered
 		elif command == '':
