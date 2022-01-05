@@ -35,7 +35,11 @@ def main():
 		elif command == 'DJ':
 			if is_arguments_length(commands, 0):
 				display_game_detail()
-
+		
+		elif command == 'D':
+			if is_arguments_length(commands, 1) or is_arguments_length(commands, 2):
+				give_up_game(commands[1:])
+        
 		# close the program, if a blank line is entered
 		elif command == '':
 			break
@@ -96,6 +100,19 @@ def display_game_detail():
 		print("{} ({}) ({}) ({}) ({}) ({}) ({}) [{}]".format(player['name'], *player['pockets']))
 
 
+def give_up_game(player_names):
+	result = gclr.give_up_game(player_names)
+
+	if result['no_game_in_progress']:
+		print('Não existe jogo em curso.')
+	elif result['player_not_found']:
+		print('Jogador inexistente.')
+	elif result['player_not_in_game']:
+		print('Jogador não participa no jogo em curso.')
+	else:
+		print('Jogo terminado com sucesso.')
+		
+    
 def is_arguments_length(commands, length):
 	if len(commands)-1 != length:  
 		print('Instrução inválida.')
