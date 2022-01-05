@@ -82,3 +82,52 @@ def start_game(player_1_name, player_2_name, level=None):
 def get_game_detail():
 	board = Board.get()
 	return board
+
+
+def give_up_game(player_names):
+	result = {'no_game_in_progress': False, 'player_not_found': False, 'player_not_in_game': False}
+
+	if not game_in_progress():
+		result['no_game_in_progress'] = True
+		return result
+
+	board = Board.get()
+
+	if len(player_names) == 1:
+		player = PlayerRecord.get_player(player_names[0])
+		
+		if player is None:
+			result['player_not_found'] = True
+			return result 
+
+		if player['name'] not in [board['player_1']['name'], board['player_2']['name']]: 
+			result['player_not_in_game'] = True
+			return result 
+		
+		if board['player_1']['name'] == player['name']:
+			other_player = PlayerRecord.get_player(board['player_2']['name'])
+		else:
+			other_player = PlayerRecord.get_player(board['player_1']['name'])
+
+		player['lost'] += 1
+		other_player['won'] += 1 
+
+	elif len(player_names) == 2:
+		player_1 = PlayerRecord.get_player(player_names[0])
+		player_2 = PlayerRecord.get_player(player_names[1])
+
+		if player_1 is None or player_2 is None:
+			result['player_not_found'] = True
+			return result
+
+		board_players = [board['player_1']['name'], board['player_2']['name']]
+		if player_1['name'] not in board_players or player_2['name'] not in board_players:
+			result['player_not_in_game'] = True
+			return result
+
+		player_1['lost'] += 1
+		player_2['lost'] += 1
+
+	empty_board = new_board_instance()
+	Board.set(empty_board)
+	return result

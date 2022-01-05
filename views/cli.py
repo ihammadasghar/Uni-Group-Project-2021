@@ -53,7 +53,13 @@ def main():
 				print('Instrução inválida.')
 				continue
 			display_game_detail()
-
+		
+		elif command == 'D':
+			if len(commands)-1 not in [1, 2]:
+				print('Instrução inválida.')
+				continue
+			give_up_game(commands[1:])
+		
 		# close the program, if a blank line is entered
 		elif command == '':
 			break
@@ -112,3 +118,17 @@ def display_game_detail():
 	players = [board['player_1'], board['player_2']]
 	for player in players:
 		print("{} ({}) ({}) ({}) ({}) ({}) ({}) [{}]".format(player['name'], *player['pockets']))
+
+
+def give_up_game(player_names):
+	result = gclr.give_up_game(player_names)
+
+	if result['no_game_in_progress']:
+		print('Não existe jogo em curso.')
+	elif result['player_not_found']:
+		print('Jogador inexistente.')
+	elif result['player_not_in_game']:
+		print('Jogador não participa no jogo em curso.')
+	else:
+		print('Jogo terminado com sucesso.')
+		
