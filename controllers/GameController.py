@@ -26,15 +26,14 @@ def new_player_instance(player_name):
 	return player
 
 
-def bubble_sort(itens):
-	pass
+def sort_players(players):
+	return players
 
 
 def get_players():
 	players = PlayerRecord.all()
-	bubble_sort(players)
-	return players
-
+	sorted_players = sort_players(players) # sort players by wins and then name
+	return sorted_players
 
 
 def new_board_instance(player_1_name=None, player_2_name=None, level=None):
@@ -91,6 +90,9 @@ def start_game(player_1_name, player_2_name, level=None):
 
 
 def get_game_detail():
+	if not game_in_progress(): # return none if no game in progress
+		return
+
 	board = Board.get()
 	return board
 
@@ -98,47 +100,57 @@ def get_game_detail():
 def give_up_game(player_names):
 	result = {'no_game_in_progress': False, 'player_not_found': False, 'player_not_in_game': False}
 
+	# check if a game is in progress
 	if not game_in_progress():
 		result['no_game_in_progress'] = True
 		return result
 
 	board = Board.get()
 
-	if len(player_names) == 1:
+	if len(player_names) == 1: # if one player gaver up
 		player = PlayerRecord.get_player(player_names[0])
 		
+		# check if player is registered
 		if player is None:
 			result['player_not_found'] = True
 			return result 
 
+		# check if player is part of the current game
 		if player['name'] not in [board['player_1']['name'], board['player_2']['name']]: 
 			result['player_not_in_game'] = True
 			return result 
 		
+		# get the other player
 		if board['player_1']['name'] == player['name']:
 			other_player = PlayerRecord.get_player(board['player_2']['name'])
 		else:
 			other_player = PlayerRecord.get_player(board['player_1']['name'])
 
+		# update player records
 		player['lost'] += 1
 		other_player['won'] += 1 
 
-	elif len(player_names) == 2:
+	elif len(player_names) == 2: # if 2 players gave up
 		player_1 = PlayerRecord.get_player(player_names[0])
 		player_2 = PlayerRecord.get_player(player_names[1])
 
+		# check if both players are registered
 		if player_1 is None or player_2 is None:
 			result['player_not_found'] = True
 			return result
 
+		# check if both players are part of the current game
 		board_players = [board['player_1']['name'], board['player_2']['name']]
 		if player_1['name'] not in board_players or player_2['name'] not in board_players:
 			result['player_not_in_game'] = True
 			return result
 
+		# update player records
 		player_1['lost'] += 1
 		player_2['lost'] += 1
 
+	# reset board
 	empty_board = new_board_instance()
 	Board.set(empty_board)
+
 	return result
