@@ -17,7 +17,7 @@ def main():
 				register_player(player_name=commands[1])
 
 		elif commands == 'LJ':
-			if is_arguments_length(commands, 2):
+			if is_arguments_length(commands, 0):
 				list_players()
 
 		elif command == 'IJ':
