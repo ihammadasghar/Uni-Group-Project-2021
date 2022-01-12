@@ -78,9 +78,7 @@ def start_game(player_records, board, player_1_name, player_2_name, level=None):
 		return result 
 
 	# update board for the game
-	board['player_1']['name'] = player_1_name
-	board['player_2']['name'] = player_2_name
-	board['level'] = level
+	Board.update(board, player_1_name, player_2_name, level)
 
 	# update player records
 	player_1['played'] += 1
@@ -148,8 +146,6 @@ def give_up_game(player_records, board, player_names):
 		player_2['lost'] += 1
 
 	# reset board
-	board['player_1']['name'] = None
-	board['player_2']['name'] = None
-	board['level'] = None
+	Board.update(board)
 
 	return result
