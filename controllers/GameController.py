@@ -6,24 +6,24 @@ from models import Board
 from models import PlayerRecord
 
 
-def register_player(player_name):
-	players = PlayerRecord.all()
-	for p in players:
+def get_game_data():
+	game_data = {
+		'player_records': [PlayerRecord.new_player_instance("CPU")],
+		'board': Board.new_board_instance()
+	}
+	return game_data
+
+
+def register_player(player_records, player_name):
+	for player in player_records:
 		# return false if player with this name already exists
-		if p['name'] == player_name:
+		if player['name'] == player_name:
 			return False
 
 	# create and add player to player_records
-	new_player_record = new_player_instance(player_name)
-	PlayerRecord.create(new_player_record)
+	new_player_record = PlayerRecord.new_player_instance(player_name)
+	PlayerRecord.create(player_records, new_player_record)
 	return True
-
-
-def new_player_instance(player_name):
-	player = {
-		'name': player_name, 'played': 0, 'won': 0, 'drawn': 0, 'lost': 0
-	}
-	return player
 
 
 def sort_players(players): # bubble sort algorithm
@@ -48,57 +48,39 @@ def sort_players(players): # bubble sort algorithm
 	return sorted_players
 
 
-def get_players():
-	players = PlayerRecord.all()
-	sorted_players = sort_players(players) # sort players by wins and then name
+def get_sorted_players(player_records):
+	sorted_players = sort_players(player_records) # sort players by wins and then name
 	return sorted_players
 
 
-def new_board_instance(player_1_name=None, player_2_name=None, level=None):
-	board = {
-    	'player_1': {
-        	'name': player_1_name,
-        	'pockets': [4, 4, 4, 4, 4, 4, 0]
- 		},
-    	'player_2': {
-        	'name': player_2_name,
-        	'pockets': [4, 4, 4, 4, 4, 4, 0]
-    	},
-    	'level': level 
-	} 
-	return board
-
-
-def game_in_progress():
-	board = Board.get()
-
+def game_in_progress(board):
 	# if the player_1 name in the program's board is not None,
 	# a game is in progress
 	if board['player_1']['name']:
 		return True
-	else:
-		return False
+	return False
 
 
-def start_game(player_1_name, player_2_name, level=None):
+def start_game(player_records, board, player_1_name, player_2_name, level=None):
 	result = {'game_in_progress': False, 'player_not_found': False}
 
 	# check if no game is already in progress
-	if game_in_progress():
+	if game_in_progress(board):
 		result['game_in_progress'] = True 
 		return result
 
-	player_1 = PlayerRecord.get_player(player_1_name)
-	player_2 = PlayerRecord.get_player(player_2_name)
+	player_1 = PlayerRecord.get_player(player_records, player_1_name)
+	player_2 = PlayerRecord.get_player(player_records, player_2_name)
 
 	# check if players are registered
 	if player_1 is None or player_2 is None:
 		result['player_not_found'] = True
 		return result 
 
-	# set up board for the game
-	board = new_board_instance(player_1_name, player_2_name, level)
-	Board.set(board) 
+	# update board for the game
+	board['player_1']['name'] = player_1_name
+	board['player_2']['name'] = player_2_name
+	board['level'] = level
 
 	# update player records
 	player_1['played'] += 1
@@ -115,18 +97,16 @@ def get_game_detail():
 	return board
 
 
-def give_up_game(player_names):
+def give_up_game(player_records, board, player_names):
 	result = {'no_game_in_progress': False, 'player_not_found': False, 'player_not_in_game': False}
 
 	# check if a game is in progress
-	if not game_in_progress():
+	if not game_in_progress(board):
 		result['no_game_in_progress'] = True
 		return result
 
-	board = Board.get()
-
 	if len(player_names) == 1: # if one player gaver up
-		player = PlayerRecord.get_player(player_names[0])
+		player = PlayerRecord.get_player(player_records, player_names[0])
 		
 		# check if player is registered
 		if player is None:
@@ -140,17 +120,17 @@ def give_up_game(player_names):
 		
 		# get the other player
 		if board['player_1']['name'] == player['name']:
-			other_player = PlayerRecord.get_player(board['player_2']['name'])
+			other_player = PlayerRecord.get_player(player_records, board['player_2']['name'])
 		else:
-			other_player = PlayerRecord.get_player(board['player_1']['name'])
+			other_player = PlayerRecord.get_player(player_records, board['player_1']['name'])
 
 		# update player records
 		player['lost'] += 1
 		other_player['won'] += 1 
 
 	elif len(player_names) == 2: # if 2 players gave up
-		player_1 = PlayerRecord.get_player(player_names[0])
-		player_2 = PlayerRecord.get_player(player_names[1])
+		player_1 = PlayerRecord.get_player(player_records, player_names[0])
+		player_2 = PlayerRecord.get_player(player_records, player_names[1])
 
 		# check if both players are registered
 		if player_1 is None or player_2 is None:
@@ -168,7 +148,8 @@ def give_up_game(player_names):
 		player_2['lost'] += 1
 
 	# reset board
-	empty_board = new_board_instance()
-	Board.set(empty_board)
+	board['player_1']['name'] = None
+	board['player_2']['name'] = None
+	board['level'] = None
 
 	return result

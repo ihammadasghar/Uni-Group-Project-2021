@@ -4,25 +4,19 @@
 
 # Ex. player_records =  [{'name': 'Anees', 'played': 4, 'won': 2, 'drawn': 1, 'lost': 1}]
 
-player_records = [
-	{'name': 'CPU', 'played': 0, 'won': 0, 'drawn': 0, 'lost': 0}
-]
+
+def new_player_instance(player_name):
+	player = {
+		'name': player_name, 'played': 0, 'won': 0, 'drawn': 0, 'lost': 0
+	}
+	return player
 
 
-def all():
-	return player_records
-
-
-def create(new_player_record):
+def create(player_records, new_player_record):
 	player_records.append(new_player_record)
 
 
-def set(new_player_records):
-	global player_records
-	player_records = new_player_records
-
-
-def get_player(player_name):
+def get_player(player_records, player_name):
 	for player in player_records:
 		if player['name'] == player_name:
 			return player

@@ -16,13 +16,10 @@ def load_game(filename):
         return False
 
     with open(filepath, "r", encoding="utf-8") as file:
-        game_data = json.load(file)
-        PR.set(game_data['player_records'])
-        Board.set(game_data['board'])
-        return True
+        return json.load(file)
 
     
-def save_game(filename):
+def save_game(game_data, filename):
     # create "saved" directory if it doesn't exist already
     if not os.path.isdir('./saved'):
         os.mkdir('./saved')
@@ -30,8 +27,4 @@ def save_game(filename):
     filepath = f"./saved/{filename}"
 
     with open(filepath, mode="w") as file:
-        game_data = {
-            'player_records': PR.all(),
-            'board': Board.get()
-        }
         json.dump(game_data, file)
