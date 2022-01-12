@@ -7,6 +7,8 @@ from controllers import PersistenceController as pclr
 
 
 def main():
+	game_data = gclr.get_game_data()
+
 	while True:
 		user_input = input()
 		commands = user_input.split(' ')
@@ -14,35 +16,35 @@ def main():
 
 		if command == 'RJ':
 			if is_arguments_length(commands, 1):
-				register_player(player_name=commands[1])
+				register_player(game_data['player_records'], player_name=commands[1])
 
 		elif command == 'LJ':
 			if is_arguments_length(commands, 0):
-				list_players()
+				list_players(game_data['player_records'])
 
 		elif command == 'IJ':
 			if is_arguments_length(commands, 2):
-				start_game(player_1_name=commands[1], player_2_name=commands[2])
+				start_game(game_data['player_records'], game_data['board'], player_1_name=commands[1], player_2_name=commands[2])
 
 		elif command == 'IJA':
 			if is_arguments_length(commands, 2):
-				start_auto_game(player_name=commands[1], level=commands[2])
+				start_auto_game(game_data['player_records'], game_data['board'], player_name=commands[1], level=commands[2])
 
 		elif command == 'L':
-			if is_arguments_length(commands, 1): 
-				load_game(filename=commands[1])
+			if is_arguments_length(commands, 1):
+				game_data = load_game(filename=commands[1])
       
 		elif command == 'G':
 			if is_arguments_length(commands, 1):
-				save_game(filename=commands[1])
+				save_game(game_data, filename=commands[1])
 
 		elif command == 'DJ':
 			if is_arguments_length(commands, 0):
-				display_game_detail()
+				display_game_detail(game_data['board'])
 		
 		elif command == 'D':
 			if is_arguments_length(commands, 1) or is_arguments_length(commands, 2):
-				give_up_game(player_names=commands[1:])
+				give_up_game(game_data['player_records'], game_data['board'], player_names=commands[1:])
         
 		# close the program, if a blank line is entered
 		elif command == '':
@@ -59,38 +61,39 @@ def is_arguments_length(commands, length):
 	return True
 
 
-def register_player(player_name):
-	registered = gclr.register_player(player_name)
+def register_player(player_records, player_name):
+	is_registered = gclr.register_player(player_records, player_name)
 
-	if registered:
+	if is_registered:
 		print("Jogador registado com sucesso.")
 	else:
 		print("Jogador existente.")
 
 
-def list_players():
-	players = gclr.get_players()
+def list_players(player_records):
+	players = gclr.get_sorted_players(player_records)
 
 	for player in players:
 		print("{} {} {} {} {}".format(*player.values()))
 
 
 def load_game(filename):
-	loaded = pclr.load_game(filename)
+	data = pclr.load_game(filename)
 
-	if loaded:
+	if data:
 		print("Jogo lido com sucesso.")
+		return data
 	else:
 		print("Ficheiro inexistente.")
 
 
-def save_game(filename):
-	pclr.save_game(filename)
+def save_game(game_data, filename):
+	pclr.save_game(game_data, filename)
 	print("Jogo gravado com sucesso.")
 
 
-def start_game(player_1_name, player_2_name):
-	result = gclr.start_game(player_1_name, player_2_name)
+def start_game(player_records, board, player_1_name, player_2_name):
+	result = gclr.start_game(player_records, board, player_1_name, player_2_name)
 
 	if result['game_in_progress']:
 		print('Existe um jogo em curso.')
@@ -100,8 +103,8 @@ def start_game(player_1_name, player_2_name):
 		print(f'Jogo iniciado com sucesso.')
 
 
-def start_auto_game(player_name, level):
-	result = gclr.start_game(player_name, 'CPU', level)
+def start_auto_game(player_records, board, player_name, level):
+	result = gclr.start_game(player_records, board, player_name, 'CPU', level)
 
 	if result['game_in_progress']:
 		print('Existe um jogo em curso.')
@@ -111,10 +114,8 @@ def start_auto_game(player_name, level):
 		print(f'Jogo automático de nivel {level} iniciado com sucesso.')
 
 
-def display_game_detail():
-	board = gclr.get_game_detail()
-
-	if not board:
+def display_game_detail(board):
+	if not gclr.game_in_progress(board):
 		print("Não existe jogo em curso.")
 		return
 
@@ -123,8 +124,8 @@ def display_game_detail():
 		print("{} ({}) ({}) ({}) ({}) ({}) ({}) [{}]".format(player['name'], *player['pockets']))
 
 
-def give_up_game(player_names):
-	result = gclr.give_up_game(player_names)
+def give_up_game(player_records, board, player_names):
+	result = gclr.give_up_game(player_records, board, player_names)
 
 	if result['no_game_in_progress']:
 		print('Não existe jogo em curso.')
