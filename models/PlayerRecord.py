@@ -20,3 +20,8 @@ def get_player(player_records, player_name):
 	for player in player_records:
 		if player['name'] == player_name:
 			return player
+
+
+def update(player, to_be_updated):
+	for key, value in to_be_updated.items():
+		player[key] = value
