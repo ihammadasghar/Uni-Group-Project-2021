@@ -201,4 +201,12 @@ def player_move(player_records, board, player_name, pos):
 			auto_pos = find_auto_move(board)
 			has_another_move = execute_move(board, auto_pos, is_player_1=False)
 			if not has_another_move: break
+
+def is_game_over(board):
+	if sum(board["player_1"]["pockets"][:6]) == 0 or sum(board["player_2"]["pockets"][:6]) == 0:
+		return True 
+	return False 
+
+
+	
 		
