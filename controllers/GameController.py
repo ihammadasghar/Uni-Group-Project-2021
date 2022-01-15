@@ -81,8 +81,8 @@ def start_game(player_records, board, player_1_name, player_2_name, level=None):
 	Board.update(board, player_1_name, player_2_name, level)
 
 	# update player records
-	player_1['played'] += 1
-	player_2['played'] += 1
+	PlayerRecord.update(player_1, {'played': player_1['played']+1})
+	PlayerRecord.update(player_2, {'played': player_2['played']+1})
 
 	return result 
 
@@ -123,8 +123,8 @@ def give_up_game(player_records, board, player_names):
 			other_player = PlayerRecord.get_player(player_records, board['player_1']['name'])
 
 		# update player records
-		player['lost'] += 1
-		other_player['won'] += 1 
+		PlayerRecord.update(player, {'lost': player['lost']+1})
+		PlayerRecord.update(other_player, {'won': player['won']+1})
 
 	elif len(player_names) == 2: # if 2 players gave up
 		player_1 = PlayerRecord.get_player(player_records, player_names[0])
@@ -142,8 +142,8 @@ def give_up_game(player_records, board, player_names):
 			return result
 
 		# update player records
-		player_1['lost'] += 1
-		player_2['lost'] += 1
+		PlayerRecord.update(player_1, {'lost': player_1['lost']+1})
+		PlayerRecord.update(player_2, {'lost': player_2['lost']+1})
 
 	# reset board
 	Board.update(board)
