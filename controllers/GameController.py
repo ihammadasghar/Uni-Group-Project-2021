@@ -149,3 +149,56 @@ def give_up_game(player_records, board, player_names):
 	Board.update(board)
 
 	return result
+
+
+def player_move(player_records, board, player_name, pos):
+	result = {
+		'no_game_in_progress': False, 
+		'player_not_found': False, 
+		'player_not_in_game': False, 
+		'game_over_data': {}, 
+		'has_another_move': False
+	}
+
+	# check if a game is in progress
+	if not game_in_progress(board):
+		result['no_game_in_progress'] = True
+		return result
+
+	player = PlayerRecord.get_player(player_records, player_name)
+		
+	# check if player is registered
+	if player is None:
+		result['player_not_found'] = True
+		return result
+
+	# check if player is part of the current game
+	if player['name'] not in [board['player_1']['name'], board['player_2']['name']]: 
+		result['player_not_in_game'] = True
+		return result 
+	
+	is_player_1 = False
+	if board['player_1']['name'] == player_name:
+		is_player_1 = True	
+
+	has_another_move = execute_move(board, pos, is_player_1=False)
+
+	if is_game_over(board):
+		result['game_over_data'] = {
+			'player_1_name': board['player_1']['name'], 
+			'player_1_seeds': sum(board['player_1']['pockets']),
+			'player_2_name': board['player_2']['name'],
+			'player_2_seeds': sum(board['player_2']['pockets'])
+		}
+		return result
+
+	if has_another_move:
+		result['has_another_move'] = True
+		return result
+
+	if board['player_2']['name'] == 'CPU':
+		while True:
+			auto_pos = find_auto_move(board)
+			has_another_move = execute_move(board, auto_pos, is_player_1=False)
+			if not has_another_move: break
+		

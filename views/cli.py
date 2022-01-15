@@ -61,7 +61,13 @@ def main():
 				print('Instrução inválida.')
 				continue
 			give_up_game(game_data['player_records'], game_data['board'], player_names=commands[1:])
-        
+
+		elif command == 'J':
+			if len(commands)-1 != 2:
+				print('Instrução inválida.')
+				continue
+			player_move(game_data['player_records'], game_data['board'], player_name=commands[1], pos=commands[2])
+
 		# close the program, if a blank line is entered
 		elif command == '':
 			break
@@ -142,5 +148,24 @@ def give_up_game(player_records, board, player_names):
 		print('Jogador inexistente.')
 	elif result['player_not_in_game']:
 		print('Jogador não participa no jogo em curso.')
+	else:
+		print('Jogo terminado com sucesso.')
+
+
+def player_move(player_records, board, player_name, pos):
+	result = gclr.player_move(player_records, board, player_name, pos)
+
+	if result['no_game_in_progress']:
+		print('Não existe jogo em curso.')
+	elif result['player_not_found']:
+		print('Jogador inexistente.')
+	elif result['player_not_in_game']:
+		print('Jogador não participa no jogo em curso.')
+	elif result["game_over_data"]:
+		print('Jogo terminado.')
+		print(f'{player_1_name} {player_1_seeds}')
+		print(f'{player_2_name} {player_2_seeds}')
+	elif result['has_another_move']:
+		print(f'O jogador {player_name} tem direito a outra jogada.')
 	else:
 		print('Jogo terminado com sucesso.')
