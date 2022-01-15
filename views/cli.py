@@ -15,36 +15,52 @@ def main():
 		command = commands[0].upper()
 
 		if command == 'RJ':
-			if is_arguments_length(commands, 1):
-				register_player(game_data['player_records'], player_name=commands[1])
+			if len(commands)-1 != 1:
+				print('Instrução inválida.')
+				continue
+			register_player(game_data['player_records'], player_name=commands[1])
 
 		elif command == 'LJ':
-			if is_arguments_length(commands, 0):
-				list_players(game_data['player_records'])
+			if len(commands)-1 != 0:
+				print('Instrução inválida.')
+				continue
+			list_players(game_data['player_records'])
 
 		elif command == 'IJ':
-			if is_arguments_length(commands, 2):
-				start_game(game_data['player_records'], game_data['board'], player_1_name=commands[1], player_2_name=commands[2])
+			if len(commands)-1 != 2:
+				print('Instrução inválida.')
+				continue
+			start_game(game_data['player_records'], game_data['board'], player_1_name=commands[1], player_2_name=commands[2])
 
 		elif command == 'IJA':
-			if is_arguments_length(commands, 2):
-				start_auto_game(game_data['player_records'], game_data['board'], player_name=commands[1], level=commands[2])
+			if len(commands)-1 != 2:
+				print('Instrução inválida.')
+				continue
+			start_auto_game(game_data['player_records'], game_data['board'], player_name=commands[1], level=commands[2])
 
 		elif command == 'L':
-			if is_arguments_length(commands, 1):
-				game_data = load_game(filename=commands[1])
+			if len(commands)-1 != 1:
+				print('Instrução inválida.')
+				continue
+			game_data = load_game(filename=commands[1])
       
 		elif command == 'G':
-			if is_arguments_length(commands, 1):
-				save_game(game_data, filename=commands[1])
+			if len(commands)-1 != 1:
+				print('Instrução inválida.')
+				continue
+			save_game(game_data, filename=commands[1])
 
 		elif command == 'DJ':
-			if is_arguments_length(commands, 0):
-				display_game_detail(game_data['board'])
+			if len(commands)-1 != 0:
+				print('Instrução inválida.')
+				continue
+			display_game_detail(game_data['board'])
 		
 		elif command == 'D':
-			if is_arguments_length(commands, 1) or is_arguments_length(commands, 2):
-				give_up_game(game_data['player_records'], game_data['board'], player_names=commands[1:])
+			if len(commands)-1 not in [1, 2]:
+				print('Instrução inválida.')
+				continue
+			give_up_game(game_data['player_records'], game_data['board'], player_names=commands[1:])
         
 		# close the program, if a blank line is entered
 		elif command == '':
@@ -52,13 +68,6 @@ def main():
 
 		else:
 			print('Instrução inválida.')
-
-
-def is_arguments_length(commands, length):
-	if len(commands)-1 != length:  
-		print('Instrução inválida.')
-		return False
-	return True
 
 
 def register_player(player_records, player_name):
