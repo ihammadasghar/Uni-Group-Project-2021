@@ -1,14 +1,11 @@
-# toda a logíca relacionado com o jogo (criar jogadores, listar jogadores,
-# efetuar jogada e mais) vai ser implementado neste ficheiro (esta mensagem 
-# vai ser removida antes de submeter o projeto)
-
 from models import Board
 from models import PlayerRecord
 
 
 def get_game_data():
+	# return game_data with 2 keys - 'player_records'and 'board'
 	game_data = {
-		'player_records': [PlayerRecord.new_player_instance("CPU")],
+		'player_records': [PlayerRecord.new_player_record("CPU")],
 		'board': {
 			'player_1': {
 				'name': None,
@@ -31,7 +28,7 @@ def register_player(player_records, player_name):
 			return False
 
 	# create and add player to player_records
-	new_player_record = PlayerRecord.new_player_instance(player_name)
+	new_player_record = PlayerRecord.new_player_record(player_name)
 	PlayerRecord.create(player_records, new_player_record)
 	return True
 
@@ -40,6 +37,7 @@ def sort_players(players):
 	n_players = len(players)
 	sorted_players = players.copy()
 
+	# bubble-sort sorting algorithm
 	for i in range(n_players):
 		for j in range(n_players-i-1):
 			# case 1 - the player j has won less games than player j+1
@@ -63,7 +61,7 @@ def get_sorted_players(player_records):
 	return sorted_players
 
 
-def game_in_progress(board):
+def is_game_in_progress(board):
 	# if the player_1 name in the program's board is not None,
 	# a game is in progress
 	if board['player_1']['name']:
@@ -75,7 +73,7 @@ def start_game(player_records, board, player_1_name, player_2_name, level=None):
 	result = {'game_in_progress': False, 'player_not_found': False}
 
 	# check if no game is already in progress
-	if game_in_progress(board):
+	if is_game_in_progress(board):
 		result['game_in_progress'] = True 
 		return result
 
@@ -103,23 +101,15 @@ def start_game(player_records, board, player_1_name, player_2_name, level=None):
 	return result 
 
 
-def get_game_detail():
-	if not game_in_progress(): # return none if no game in progress
-		return
-
-	board = Board.get()
-	return board
-
-
 def give_up_game(player_records, board, player_names):
 	result = {'no_game_in_progress': False, 'player_not_found': False, 'player_not_in_game': False}
 
 	# check if a game is in progress
-	if not game_in_progress(board):
+	if not is_game_in_progress(board):
 		result['no_game_in_progress'] = True
 		return result
 
-	if len(player_names) == 1: # if one player gaver up
+	if len(player_names) == 1: # if 1 player gave up
 		player = PlayerRecord.get_player(player_records, player_names[0])
 		
 		# check if player is registered
@@ -180,7 +170,7 @@ def player_move(player_records, board, player_name, pos):
 	}
 
 	# check if a game is in progress
-	if not game_in_progress(board):
+	if not is_game_in_progress(board):
 		result['no_game_in_progress'] = True
 		return result
 
@@ -212,7 +202,7 @@ def player_move(player_records, board, player_name, pos):
 	# make CPU move if playing against auto player
 	if board['player_2']['name'] == 'CPU':
 		while True:
-			pos = find_auto_move(board)
+			pos = find_auto_move(board) # find a move for the CPU
 			has_another_move = execute_move(board, pos, player_name='CPU')
 			
 			# check if either player has no seeds left to play after auto player move
@@ -244,7 +234,7 @@ def execute_move(board, pos, player_name):
 		all_pockets[pos] += 1
 		seeds_to_spread -= 1
 
-	#  player has another move if last seed was placed in the player's own base
+	#  if last seed was placed in the player's own base, player has another move
 	if pos == 6: has_another_move = True
 
 	#  capture if player has right to capture
@@ -308,21 +298,25 @@ def find_auto_move(board):
 	if board['level'] == 'Normal': # if game difficulty is normal
 		# return the left-most available move
 		for i in range(6):
-			if cpu_pockets[i]: return i
+			if cpu_pockets[i]: return i # return if position i has seeds
 
 	else: # if game difficulty is advanced
 		# return the move that lets the CPU capture
 		for i in range(6): 
 			last_pos = i + cpu_pockets[i] # the position where the last seed would be dropped
-			# EXPLAIN THIS CODE
-			if (i < last_pos < 6) and (board['player_1']['pockets'][5-last_pos] != 0) and (cpu_pockets[last_pos] == 0):
+
+			# return this position, if the 3 conditions below are met
+			# i < last_pos < 6 - the last_pos is one of the pockets of the CPU (except base)
+			# the pocket with position last_pos has no seeds
+			# the opponent pocket in front of last_pos has seeds
+			if (i < last_pos < 6) and (cpu_pockets[last_pos] == 0) and (board['player_1']['pockets'][5-last_pos] != 0):
 				return i
 		
 		# return the move that ends in the base
 		for i in range(6):
 			last_pos = i + cpu_pockets[i] # the position where the last seed would be dropped
-			if last_pos == 6: return i
+			if last_pos == 6: return i # return this position if last_pos is the position of CPU's base (i.e., 6)
 
 		# return the right-most available move
 		for i in range(5, -1, -1):
-			if cpu_pockets[i]: return i
+			if cpu_pockets[i]: return i # return if position i has seeds
