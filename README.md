@@ -28,9 +28,9 @@
 ## Datas Relevantes
 
 | Data                      | Evento                               |
-| ------------------------- | ------------------------------------ |
+|---------------------------| ------------------------------------ |
 | 16/11/2021                | Disponibilização do enunciado.       |
-| 16/01/2022 23:59:59 GMT   | Entrega final do trabalho.           |
+| 23/01/2022 23:59:59 GMT   | Entrega final do trabalho.           |
 | 25/01/2022 --- 04/02/2022 | Provas de autoria.                   |
 
 ## Descrição
@@ -73,7 +73,7 @@ No nível **Normal**, o jogador automático opta pela seguinte estratégia:
 
 No nível **Avançado**, o  jogador automático opta pelos seguintes passos, por ordem:
 
-1. Se possível, seleciona uma casa que permita capturar as peças de uma das casas do oponente. Se existirem várias na mesma situação, opta pela mais à esquerda possível (ver Regra B).
+1. Se possível, seleciona uma casa que permita capturar as peças de uma das casas do oponente (ver Regra B).
 2. Se possível, seleciona uma casa que permita terminar no poço, de forma a jogar novamente. Se existirem várias na mesma situação, opta pela mais à esquerda possível (ver Regra A).
 3. Seleciona a casa mais à direita possível para espalhar sementes.
 
@@ -208,7 +208,7 @@ Saída com insucesso:
 
 - Quando não existe um jogo em curso:
 
-      Não existe jogo em curso.
+      Não existem jogo em curso.
 
 ### Efetuar jogada (J)
 
@@ -244,7 +244,7 @@ Saída com insucesso:
 
 - Quando não existe um jogo em curso:
 
-      Não existe jogo em curso.
+      Não existem jogo em curso.
 
 - Quando o jogador indicado não existe:
 
@@ -298,7 +298,7 @@ Saída com sucesso:
 
     Jogo gravado com sucesso.
 
-Saída com insucesso: Nenhuma.
+Saída com insucesso: nenhuma.
 
 ### Ler (L)
 
@@ -314,11 +314,7 @@ Saída com sucesso:
 
     Jogo lido com sucesso.
 
-Saída com insucesso:
-
-- Quando o ficheiro indicado não existe:
-
-      Ficheiro inexistente.
+Saída com insucesso: nenhuma.
 
 ## Estrutura do projeto
 

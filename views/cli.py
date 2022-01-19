@@ -66,7 +66,7 @@ def main():
 			if len(commands)-1 != 2:
 				print('Instrução inválida.')
 				continue
-			player_move(game_data['player_records'], game_data['board'], player_name=commands[1], pos=commands[2])
+			player_move(game_data['player_records'], game_data['board'], player_name=commands[1], pos=int(commands[2]))
 
 		# close the program, if a blank line is entered
 		elif command == '':
@@ -126,7 +126,7 @@ def start_auto_game(player_records, board, player_name, level):
 	elif result['player_not_found']:
 		print('Jogador inexistente.')
 	else:
-		print(f'Jogo automático de nivel {level} iniciado com sucesso.')
+		print(f'Jogo automático de nível {level} iniciado com sucesso.')
 
 
 def display_game_detail(board):
@@ -162,10 +162,11 @@ def player_move(player_records, board, player_name, pos):
 	elif result['player_not_in_game']:
 		print('Jogador não participa no jogo em curso.')
 	elif result["game_over_data"]:
+		game_over_data = result['game_over_data']
 		print('Jogo terminado.')
-		print(f'{player_1_name} {player_1_seeds}')
-		print(f'{player_2_name} {player_2_seeds}')
+		print(f"{game_over_data['player_1_name']} {game_over_data['player_1_seeds']}")
+		print(f"{game_over_data['player_2_name']} {game_over_data['player_2_seeds']}")
 	elif result['has_another_move']:
 		print(f'O jogador {player_name} tem direito a outra jogada.')
 	else:
-		print('Jogo terminado com sucesso.')
+		print('Jogada efetuada com sucesso.')
