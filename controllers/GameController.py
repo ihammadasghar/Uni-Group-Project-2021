@@ -279,8 +279,8 @@ def wrap_up_game(board, player_records):
 		PlayerRecord.update(player_2, {'lost': player_2['lost']+1})
 	
 	elif game_over_data['player_1_seeds'] < game_over_data['player_2_seeds']: # player 2 won
-		PlayerRecord.update(player_1, {'won': player_1['won']+1})
-		PlayerRecord.update(player_2, {'lost': player_2['lost']+1})
+		PlayerRecord.update(player_1, {'lost': player_1['lost']+1})
+		PlayerRecord.update(player_2, {'won': player_2['won']+1})
 
 	else: # game ended in a draw
 		PlayerRecord.update(player_1, {'draw': player_1['draw']+1})
