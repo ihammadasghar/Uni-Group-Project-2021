@@ -123,7 +123,7 @@ def display_game_detail(board):
 
 	players = [board['player_1'], board['player_2']]
 	for player in players:
-		print("{} ({}) ({}) ({}) ({}) ({}) ({}) [{}]".format(player['name'], *player['pockets']))
+		print("{} [{}] [{}] [{}] [{}] [{}] [{}] ({})".format(player['name'], *player['pockets']))
 
 
 def give_up_game(player_records, board, player_names):

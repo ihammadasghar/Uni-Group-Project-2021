@@ -1,6 +1,6 @@
 Jogador registado com sucesso.
 Jogador registado com sucesso.
-Não existe jogo em curso.
+NÃ£o existe jogo em curso.
 Jogo iniciado com sucesso.
 A [4] [4] [4] [4] [4] [4] (0)
 B [4] [4] [4] [4] [4] [4] (0)
@@ -24,11 +24,11 @@ O jogador B tem direito a outra jogada.
 Jogada efetuada com sucesso.
 Jogada efetuada com sucesso.
 Jogada efetuada com sucesso.
-A [0] [0] [0] [0] [0] [3] (19)
-B [0] [4] [0] [4] [2] [10] (6)
+Jogada efetuada com sucesso.
+Jogada efetuada com sucesso.
 Jogo terminado.
-A 20
-B 28
+A 12
+B 36
 B 1 1 0 0
 A 1 0 0 1
 CPU 0 0 0 0
