@@ -119,19 +119,6 @@ def display_game_detail(board):
 		print("{} [{}] [{}] [{}] [{}] [{}] [{}] ({})".format(player['name'], *player['pockets']))
 
 
-def give_up_game(player_records, board, player_names):
-	result = gclr.give_up_game(player_records, board, player_names)
-
-	if result['no_game_in_progress']:
-		print('Não existe jogo em curso.')
-	elif result['player_not_found']:
-		print('Jogador inexistente.')
-	elif result['player_not_in_game']:
-		print('Jogador não participa no jogo em curso.')
-	else:
-		print('Jogo terminado com sucesso.')
-
-
 def player_move(player_records, board, player_name, pos):
 	result = gclr.player_move(player_records, board, player_name, pos)
 
@@ -155,3 +142,16 @@ def player_move(player_records, board, player_name, pos):
 
 	else:
 		print('Jogada efetuada com sucesso.')
+
+
+def give_up_game(player_records, board, player_names):
+	result = gclr.give_up_game(player_records, board, player_names)
+
+	if result['no_game_in_progress']:
+		print('Não existe jogo em curso.')
+	elif result['player_not_found']:
+		print('Jogador inexistente.')
+	elif result['player_not_in_game']:
+		print('Jogador não participa no jogo em curso.')
+	else:
+		print('Jogo terminado com sucesso.')
