@@ -130,7 +130,7 @@ def give_up_game(player_records, board, player_names):
 
 		# update player records
 		PlayerRecord.update(player, {'lost': player['lost']+1})
-		PlayerRecord.update(other_player, {'won': player['won']+1})
+		PlayerRecord.update(other_player, {'won': other_player['won']+1})
 
 	elif len(player_names) == 2: # if 2 players gave up
 		player_1 = PlayerRecord.get_player(player_records, player_names[0])
