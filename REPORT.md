@@ -43,7 +43,7 @@ Para o comando "DJ", verificamos primeiro se o número correto de argumentos foi
 Para o comando "J", verificamos primeiro se o número correto de argumentos foi passado pelo utilizador, 2 - o nome do jogador e a posição. Em seguida, o "player_move" (GameController) é invocado através da função "player_move" (cli.py), que faz o seguinte:
 - Verificar se o jogo está em curso
 - Verificar se o jogador está registado
-- Verificar se o jogador faz parte do jogo atual
+- Verificar se o jogador faz parte do jogo atual utilizando a função "is_part_of_game"
 - Executar a jogada do jogador utilizando a função "execute_move" (GameController), que faz o seguinte:
     - Espalhar sementes e update o Board.
     - Capturar se as condições de captura estiverem satisfeitas
@@ -58,7 +58,7 @@ Para o comando "J", verificamos primeiro se o número correto de argumentos foi 
     - Se a dificuldade é "Avançada"
         - Retornar a posição que permite à CPU capturar
         - Retornar a posição que permite à CPU ter outra jogada
-        - Retornar a posição mais disponível
+        - Retornar a posição mais à direita disponível
         
 Finalmente, a função "player_move" (cli.py) apresenta a saída adequada ao utilizador baseado no dicionário "resultado" retornado pelo "player_move" (GameController).
 
@@ -77,7 +77,3 @@ Para o comando "G", verificamos primeiro se o número de argumentos recebidos pe
 
 ### Ler
 Para o comando "L", verificamos primeiro se o número de argumentos recebidos pelo utilizador é correto, ou seja, 1 - o nome do ficheiro. Em seguida, invocamos a função load_game (PersistenceController) que abre o ficheiro com o nome de ficheiro dado e retorne o conteúdo do ficheiro.
-
-
-## Distribuição de Tarefas
-Realizaram-se reuniões de zoom para decidir a arquitetura do programa. A maior parte do código foi escrito durante as reuniões em presença de todos os membros do grupo.
