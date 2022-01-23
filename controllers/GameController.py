@@ -1,9 +1,8 @@
-from models import Board
-from models import PlayerRecord
+from models import Board, PlayerRecord
 
 
 def get_game_data():
-	# return game_data with 2 keys - 'player_records'and 'board'
+	# return game_data with 2 keys - 'board' and 'player_records'
 	game_data = {
 		'player_records': [PlayerRecord.new_player_record("CPU")],
 		'board': {
@@ -22,8 +21,8 @@ def get_game_data():
 
 
 def register_player(player_records, player_name):
+	# return false if a player with this name already exists
 	for player in player_records:
-		# return false if player with this name already exists
 		if player['name'] == player_name:
 			return False
 
@@ -62,8 +61,7 @@ def get_sorted_players(player_records):
 
 
 def is_game_in_progress(board):
-	# if the player_1 name in the program's board is not None,
-	# a game is in progress
+	# a game is in progress if the player_1 name in the program's board is not None
 	if board['player_1']['name']:
 		return True
 	return False
@@ -101,60 +99,11 @@ def start_game(player_records, board, player_1_name, player_2_name, level=None):
 	return result 
 
 
-def give_up_game(player_records, board, player_names):
-	result = {'no_game_in_progress': False, 'player_not_found': False, 'player_not_in_game': False}
-
-	# check if a game is in progress
-	if not is_game_in_progress(board):
-		result['no_game_in_progress'] = True
-		return result
-
-	if len(player_names) == 1: # if 1 player gave up
-		player = PlayerRecord.get_player(player_records, player_names[0])
-		
-		# check if player is registered
-		if player is None:
-			result['player_not_found'] = True
-			return result 
-
-		# check if player is part of the current game
-		if player['name'] not in [board['player_1']['name'], board['player_2']['name']]: 
-			result['player_not_in_game'] = True
-			return result 
-		
-		# get the other player
-		if board['player_1']['name'] == player['name']:
-			other_player = PlayerRecord.get_player(player_records, board['player_2']['name'])
-		else:
-			other_player = PlayerRecord.get_player(player_records, board['player_1']['name'])
-
-		# update player records
-		PlayerRecord.update(player, {'lost': player['lost']+1})
-		PlayerRecord.update(other_player, {'won': other_player['won']+1})
-
-	elif len(player_names) == 2: # if 2 players gave up
-		player_1 = PlayerRecord.get_player(player_records, player_names[0])
-		player_2 = PlayerRecord.get_player(player_records, player_names[1])
-
-		# check if both players are registered
-		if player_1 is None or player_2 is None:
-			result['player_not_found'] = True
-			return result
-
-		# check if both players are part of the current game
-		board_players = [board['player_1']['name'], board['player_2']['name']]
-		if player_1['name'] not in board_players or player_2['name'] not in board_players:
-			result['player_not_in_game'] = True
-			return result
-
-		# update player records
-		PlayerRecord.update(player_1, {'lost': player_1['lost']+1})
-		PlayerRecord.update(player_2, {'lost': player_2['lost']+1})
-
-	# reset board
-	Board.reset(board)
-
-	return result
+def is_part_of_game(board, player_name):
+	# check if player with the given name is part of the present game
+	if (board['player_1']['name'] == player_name) or board['player_2']['name'] == player_name:
+		return True
+	return False
 
 
 def player_move(player_records, board, player_name, pos):
@@ -182,12 +131,12 @@ def player_move(player_records, board, player_name, pos):
 		return result
 
 	# check if player is part of the current game
-	if player['name'] not in [board['player_1']['name'], board['player_2']['name']]: 
+	if not is_part_of_game(board, player_name): 
 		result['player_not_in_game'] = True
 		return result 
 	
 	# execute player move
-	has_another_move = execute_move(board, pos , player_name)
+	has_another_move = execute_move(board, pos, player_name)
 
 	# check if either player has no more seeds left to play
 	if is_game_over(board):
@@ -199,15 +148,15 @@ def player_move(player_records, board, player_name, pos):
 		result['has_another_move'] = True
 		return result
 
-	# make CPU move if playing against auto player
+	# make CPU move if playing against CPU
 	if board['player_2']['name'] == 'CPU':
 		while True:
 			pos = find_auto_move(board) # find a move for the CPU
 			has_another_move = execute_move(board, pos, player_name='CPU')
 			
-			# check if either player has no seeds left to play after auto player move
+			# check if either player has no seeds left to play
 			if is_game_over(board):
-				result['game_over_data'] = wrap_up_game(board, player_records) # returns game_over_data
+				result['game_over_data'] = wrap_up_game(board, player_records)
 				return result
 			
 			# break the loop if auto player does not have a right to another move
@@ -228,7 +177,7 @@ def execute_move(board, pos, player_name):
 
 	#  spread seeds
 	seeds_to_spread = all_pockets[pos]
-	all_pockets[pos] = 0
+	all_pockets[pos] = 0 # remove seeds from the selected position
 	while seeds_to_spread:
 		pos = (pos + 1) % 13
 		all_pockets[pos] += 1
@@ -238,7 +187,7 @@ def execute_move(board, pos, player_name):
 	if pos == 6: has_another_move = True
 
 	#  capture if player has right to capture
-	elif pos < 6 and all_pockets[pos] == 1:
+	elif (pos < 6) and (all_pockets[pos] == 1):
 		opposite_pocket_seeds = all_pockets[12-pos]
 		if opposite_pocket_seeds:
 			all_pockets[12-pos] = 0
@@ -246,23 +195,23 @@ def execute_move(board, pos, player_name):
 			all_pockets[6] += opposite_pocket_seeds + 1
 
 	# update the players' pockets in board
-	if board['player_1']['name'] == player_name:
+	if board['player_1']['name'] == player_name: # if player_1 is making this move
 		Board.update(board, player_1_pockets=all_pockets[:7], player_2_pockets=all_pockets[7:])
-	else:
+	else: # if player_2 is making this move
 		Board.update(board, player_1_pockets=all_pockets[7:], player_2_pockets=all_pockets[:7])
 		
 	return has_another_move
 
 
 def is_game_over(board):
-	# return true if either player has no more seeds left to play, otherwise false
+	# return true if either player has no more seeds left to play
 	if sum(board["player_1"]["pockets"][:6]) == 0 or sum(board["player_2"]["pockets"][:6]) == 0:
 		return True 
 	return False 
 
 
 def wrap_up_game(board, player_records):
-	# create return dict - game_over_data
+	# dict to be returned
 	game_over_data = {
 		'player_1_name': board['player_1']['name'],
 		'player_2_name': board['player_2']['name'],
@@ -295,28 +244,83 @@ def wrap_up_game(board, player_records):
 def find_auto_move(board):
 	cpu_pockets = board['player_2']['pockets']
 
-	if board['level'] == 'Normal': # if game difficulty is normal
+	if board['level'] == 'Normal': # normal game difficulty
 		# return the left-most available move
 		for i in range(6):
-			if cpu_pockets[i]: return i # return if position i has seeds
+			if cpu_pockets[i]: return i
 
-	else: # if game difficulty is advanced
+	else: # advanced game difficulty
 		# return the move that lets the CPU capture
 		for i in range(6): 
 			last_pos = i + cpu_pockets[i] # the position where the last seed would be dropped
 
-			# return this position, if the 3 conditions below are met
 			# i < last_pos < 6 - the last_pos is one of the pockets of the CPU (except base)
-			# the pocket with position last_pos has no seeds
-			# the opponent pocket in front of last_pos has seeds
-			if (i < last_pos < 6) and (cpu_pockets[last_pos] == 0) and (board['player_1']['pockets'][5-last_pos] != 0):
+			# cpu_pockets[last_pos] == 0 - the pocket with position last_pos has no seeds
+			# board['player_1']['pockets'][5-last_pos] != 0 - the pocket in front of last_pos has seeds available
+			if (i < last_pos < 6) and (cpu_pockets[last_pos] == 0) and \
+				(board['player_1']['pockets'][5-last_pos] != 0):
 				return i
 		
 		# return the move that ends in the base
 		for i in range(6):
 			last_pos = i + cpu_pockets[i] # the position where the last seed would be dropped
-			if last_pos == 6: return i # return this position if last_pos is the position of CPU's base (i.e., 6)
+			if last_pos == 6: return i
 
 		# return the right-most available move
 		for i in range(5, -1, -1):
-			if cpu_pockets[i]: return i # return if position i has seeds
+			if cpu_pockets[i]: return i
+
+
+def give_up_game(player_records, board, player_names):
+	result = {'no_game_in_progress': False, 'player_not_found': False, 'player_not_in_game': False}
+
+	# check if a game is in progress
+	if not is_game_in_progress(board):
+		result['no_game_in_progress'] = True
+		return result
+
+	if len(player_names) == 1: # if 1 player gave up
+		player = PlayerRecord.get_player(player_records, player_names[0])
+		
+		# check if player is registered
+		if player is None:
+			result['player_not_found'] = True
+			return result 
+
+		# check if player is part of the current game
+		if not is_part_of_game(board, player['name']): 
+			result['player_not_in_game'] = True
+			return result 
+		
+		# get the other player
+		if board['player_1']['name'] == player['name']:
+			other_player = PlayerRecord.get_player(player_records, board['player_2']['name'])
+		else:
+			other_player = PlayerRecord.get_player(player_records, board['player_1']['name'])
+
+		# update player records
+		PlayerRecord.update(player, {'lost': player['lost']+1})
+		PlayerRecord.update(other_player, {'won': other_player['won']+1})
+
+	elif len(player_names) == 2: # if 2 players gave up
+		player_1 = PlayerRecord.get_player(player_records, player_names[0])
+		player_2 = PlayerRecord.get_player(player_records, player_names[1])
+
+		# check if both players are registered
+		if player_1 is None or player_2 is None:
+			result['player_not_found'] = True
+			return result
+
+		# check if both players are part of the current game
+		if not is_part_of_game(board, player_1['name']) or not is_part_of_game(board, player_2['name']):
+			result['player_not_in_game'] = True
+			return result
+
+		# update player records
+		PlayerRecord.update(player_1, {'lost': player_1['lost']+1})
+		PlayerRecord.update(player_2, {'lost': player_2['lost']+1})
+
+	# reset board
+	Board.reset(board)
+
+	return result
